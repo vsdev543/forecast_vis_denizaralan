@@ -60,13 +60,13 @@ for (i in (10))
   
   #EXPONENTİAL SMOOTHİNG
   expsmooth <- ets(train)
-  forecastexpsmooth <- forecast(expsmooth, h=24)
+  forecastexpsmooth <- forecast(expsmooth, h=2)
   plotexp <- autoplot(forecastexpsmooth)
   
   
   #ARIMA
   arima1 <-auto.arima(train)
-  arima_forecast<- forecast(arima1)
+  arima_forecast<- forecast(arima1,h=2)
   arima_plot <- autoplot(arima_forecast)
   arima_plot
   

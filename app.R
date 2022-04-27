@@ -20,6 +20,7 @@ library(writexl)
 source("modules/vizMod.R")
 
 ui <- tags$div(
+  tags$head(tags$link(type='text/css',href="styles.css",rel="stylesheet")),
   viz_UI("viz")
 )
 

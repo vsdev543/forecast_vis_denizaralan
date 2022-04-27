@@ -1,0 +1,124 @@
+  body{
+  background-color: #364156;
+  color:#fff;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+.datepicker{
+  background-color: black !important ;
+}
+
+.grid-2{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  
+  gap: 20px;
+}
+
+.grid-3{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  
+  gap: 20px;
+}
+
+
+.grid-4{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  
+  gap: 20px;
+}
+
+.grid-5{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  
+  gap: 20px;
+}
+
+
+.moveIt{
+  border-radius: 10px;
+  /**transition: all 1s ease-in-out;**/
+  animation-name: moveItAnime;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+}
+
+.moveItx{
+  border-radius: 10px;
+  /**transition: all 1s ease-in-out;**/
+  animation-name: moveItxAnime;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+}
+
+.brand{
+  animation-name: brand;
+  animation-duration: 8s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.fade-it{
+  animation-name: fadiIt;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in;
+}
+
+@keyframes moveItAnime {
+  0%   {transform: translate(0em,-10em) rotate(15deg) scale(0.8); opacity:0;}
+  25%  {transform: translate(0em,0em); }
+  50%  {transform: rotate(-15deg);}
+  75% {transform: rotate(15deg);}
+  100% {transform: rotate(0deg) scale(1); opacity:1;}
+}
+
+@keyframes moveItxAnime {
+  0%   { opacity:0;}
+  100% {opacity:1;}
+}
+
+@keyframes brand {
+  0%   {color:#fff;}
+  25%  {color:#1E91D6;}
+  50%  {color:#B80084}
+  75% {color:#1E91D6}
+}
+
+
+@keyframes fadiIt {
+  0%   { opacity:0; scale:0.9; transform:translate(-5vw,5vh);}
+  100% {opacity:1; scale:1;transform:translate(0,0);}
+}
+
+
+
+.main-svg{
+  border-radius: 10px;
+  
+  animation-name: fromL;
+  animation-duration: 0.8s;
+  animation-timing-function: ease-in-out;
+}
+
+
+@keyframes fromL {
+  0%   { opacity:0; transform:translate(-2vw,0);}
+  100% {opacity:1; transform:translate(0,0);}
+}
+
+
+.leftT{
+  animation-name: fromB;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+}
+
+
+@keyframes fromB {
+  0%   { opacity:0; transform:translate(0vw,5vh);}
+  100% {opacity:1; transform:translate(0,0);}
+}
