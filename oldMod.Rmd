@@ -37,11 +37,13 @@ data <- read_xlsx("data/SalesData.xlsx")
 ```{r}
 for (i in (10))
 {
+
   print(paste(("The models group:"), data[1,i+1]))
   print(paste(("The models screen:"), data[2,i+1]))
   print(paste(("The models country:"), data[3,i+1]))
   print(paste(("The models brand:"), data[4,i+1]))
   print(paste(("Train data:"), data[6:29,i+1]))
+  
   sales <- data[6:29,i+1]
   colnames(sales)<-c("a")
   sales<-sales %>%mutate(a=as.numeric(a))
@@ -60,12 +62,14 @@ for (i in (10))
   expsmooth <- ets(train)
   forecastexpsmooth <- forecast(expsmooth, h=24)
   plotexp <- autoplot(forecastexpsmooth)
-
+  
+  
   #ARIMA
   arima1 <-auto.arima(train)
   arima_forecast<- forecast(arima1)
   arima_plot <- autoplot(arima_forecast)
-
+  arima_plot
+  
    #HOLT WINTERS
    #Holt_Winters1 <- HoltWinters(train, alpha = NULL, beta = NULL, gamma = NULL,
              #seasonal = c("additive", "multiplicative"),
@@ -81,7 +85,9 @@ for (i in (10))
    beta = NULL, lead = NULL, damped = FALSE, phi = NULL, plot = TRUE)
    Holtforecast <- forecast(Holt)
    Holt_plot <- autoplot(Holtforecast)
-
+   Holt_plot
+   
+   
   #EXPONENTİAL SMOOTHİNG MSE
   expsmoth_mse <- (forecastexpsmooth$mean[1:5]-test[1:5])^2
   exp_sum<- sum(expsmoth_mse)
@@ -108,14 +114,14 @@ for (i in (10))
   head(result)
   print(result)
   
-  # library(openxlsx)
-  # wb <- loadWorkbook("~/Desktop/actualoutput.xlsx")
-  # addWorksheet(wb,"nx-55-beko-turkey")
+  library(openxlsx)
+  wb <- loadWorkbook("data/actualoutput.xlsx")
+  addWorksheet(wb,"nx-55-beko-turkey")
   df <- data.frame(result)
-  # writeData(wb,"nx-55-beko-turkey",df)
-  # saveWorkbook(wb,"~/Desktop/actualoutput.xlsx",overwrite = TRUE)
+  writeData(wb,"nx-55-beko-turkey",df)
+  saveWorkbook(wb,"data/actualoutput.xlsx",overwrite = TRUE)
   
-  write_xlsx(x = df,path = "out/actualoutput.xlsx")
+  # write_xlsx(x = df,path = "out/actualoutput.xlsx")
 
   ####SİMULATION####
   
@@ -179,12 +185,12 @@ for (i in (10))
   result2$model
   
   library(openxlsx)
-  # wb <- loadWorkbook("~/Desktop/simulatedoutput.xlsx")
-  # addWorksheet(wb,"nx-55-beko-turkey")
+  wb <- loadWorkbook("data/simulatedoutput.xlsx")
+  addWorksheet(wb,"nx-55-beko-turkey")
   df <- data.frame(result2)
-  # writeData(wb,"nx-55-beko-turkey",df)
-  # saveWorkbook(wb,"~/Desktop/simulatedoutput.xlsx",overwrite = TRUE)
+  writeData(wb,"nx-55-beko-turkey",df)
+  saveWorkbook(wb,"data/simulatedoutput.xlsx",overwrite = TRUE)
   
-  write_xlsx(x = df,path = "out/simulatedoutput.xlsx")
+  # write_xlsx(x = df,path = "out/simulatedoutput.xlsx")
 }
 ```
