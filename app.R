@@ -16,6 +16,7 @@ library(tseries)
 library(forecast)
 library(fable)
 library(writexl)
+library(shinycssloaders)
 
 library(shinyWidgets)
 
@@ -60,7 +61,7 @@ getForecastOut<-function(data,hor,modal){
 
 ui <- fluidPage(tags$head(tags$link(type='text/css',href="styles.css",rel="stylesheet")),
                 tags$div(style="display:flex; justify-content:space-between; padding: 15px 20px 0px 20px;margin-bottom:10px; background-color:rgba(255,255,255,0.2);",
-                         h2("Title text here"),
+                         h2("Long-term Product Sales Forecasting"),
                          fileInput('data','Data')
                          ),
                 fluidRow(
@@ -68,20 +69,32 @@ ui <- fluidPage(tags$head(tags$link(type='text/css',href="styles.css",rel="style
                          tabsetPanel(type = 'pills',
                            tabPanel(title = "Exponential Smoothing",
                              div(style="padding:10px; border-radius:10px; background-color:rgba(255,255,255,0.2);",
-                             plotOutput('plot-es'),hr(),
-                                    DTOutput('table-es'))
+                             plotOutput('plot-es')%>%withSpinner(),hr(),
+                                    DTOutput('table-es')%>%withSpinner(),
+                             fluidRow(column(12,
+                                             downloadBttn(outputId = 'down-es',"Download Forecast Data",style = 'jelly',block = T)
+                                             ))
+                             )
                              ),
                            tabPanel(title = "ARIMA",
                                     div(style="padding:10px; border-radius:10px; background-color:rgba(255,255,255,0.2);",
-                                        plotOutput('plot-arima'),
+                                        plotOutput('plot-arima')%>%withSpinner(),
                                         hr(),
-                                        DTOutput('table-arima'))
+                                        DTOutput('table-arima')%>%withSpinner(),
+                                        fluidRow(column(12,
+                                                        downloadBttn(outputId = 'down-arima',"Download Forecast Data",style = 'jelly',block = T)
+                                        ))
+                                        )
                                     ),
                            tabPanel(title = "Holt Winters",
                              div(style="padding:10px; border-radius:10px; background-color:rgba(255,255,255,0.2);",
-                             plotOutput('plot-hw'),
+                             plotOutput('plot-hw')%>%withSpinner(),
                              hr(),
-                                    DTOutput('table-hw'))
+                                    DTOutput('table-hw')%>%withSpinner(),
+                             fluidRow(column(12,
+                                             downloadBttn(outputId = 'down-hw',"Download Forecast Data",style = 'jelly',block = T)
+                             ))
+                             )
                              ),
                            tabPanel(title = "Modal comparison",
                                     div(style="padding:10px; border-radius:10px; background-color:rgba(255,255,255,0.2);", class='grid-3',
@@ -94,10 +107,13 @@ ui <- fluidPage(tags$head(tags$link(type='text/css',href="styles.css",rel="style
                          hr(),
                          tags$div(style="padding:10px; border-radius:10px; background-color:rgba(255,255,255,0.2);",
                                   h3("Best modal"),
-                                  uiOutput('bestmodname'),
-                                  plotOutput('best_plot'),
+                                  uiOutput('bestmodname')%>%withSpinner(),
+                                  plotOutput('best_plot')%>%withSpinner(),
                                   hr(),
-                                  DTOutput('best_forecast')
+                                  DTOutput('best_forecast')%>%withSpinner(),
+                                  fluidRow(column(12,
+                                                  downloadBttn(outputId = 'down-best',"Download Forecast Data",style = 'jelly',block = T)
+                                  ))
                                   )
                          ),
                   column(3,
@@ -221,6 +237,9 @@ server <- function(input, output, session) {
       
       output[[paste0('plot-',i)]]<-renderPlot(all[3])
       output[[paste0('table-',i)]]<-renderDT(data.frame(all[2]))
+      output[[paste0('down-',i)]]<-downloadHandler(filename = paste0(i,"-forecast.csv"),content = function(file){
+        write.csv(x = data.frame(all[2]),file,row.names = F)
+      })
       output[[paste0('card-',i)]]<-renderUI({
         l<-switch(i,
                   "es" = "Exponential smoothing",
@@ -304,6 +323,9 @@ server <- function(input, output, session) {
   output$best_plot<-renderPlot(BestModal()[3])
   output$best_forecast<-renderDT(data.frame(BestModal()[2]))
 
+  output[["down-best"]]<-downloadHandler(filename = "best-modal-forecast.csv",content = function(file){
+    write.csv(x = data.frame(BestModal()[2]),file,row.names = F)
+  })
 }
 
 shinyApp(ui, server)
